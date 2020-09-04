@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    name: photoshare
+    url: jdbc:mysql://localhost:3306/photoshare?useUnicode=true&characterEncoding=utf8&serverTimezone=UTC
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:com/example/back/mapper/*.xml
+  type-aliases-package: com.example.back.pojo

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.back.dao.userMapper">
+  <resultMap id="BaseResultMap" type="com.example.back.pojo.user">
+    <id column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_pd" jdbcType="VARCHAR" property="userPd" />
+    <result column="user_des" jdbcType="VARCHAR" property="userDes" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_name, user_pd, user_des
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_name = #{userName,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectPdByName" parameterType="java.lang.String" resultType="java.lang.String">
+    select user_pd
+    from user
+    where user_name = #{userName,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from user
+    where user_name = #{userName,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.example.back.pojo.user">
+    insert into user (user_name, user_pd, user_des
+      )
+    values (#{userName,jdbcType=VARCHAR}, #{userPd,jdbcType=VARCHAR}, #{userDes,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.back.pojo.user">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userPd != null">
+        user_pd,
+      </if>
+      <if test="userDes != null">
+        user_des,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPd != null">
+        #{userPd,jdbcType=VARCHAR},
+      </if>
+      <if test="userDes != null">
+        #{userDes,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.back.pojo.user">
+    update user
+    <set>
+      <if test="userPd != null">
+        user_pd = #{userPd,jdbcType=VARCHAR},
+      </if>
+      <if test="userDes != null">
+        user_des = #{userDes,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_name = #{userName,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.back.pojo.user">
+    update user
+    set user_pd = #{userPd,jdbcType=VARCHAR},
+      user_des = #{userDes,jdbcType=VARCHAR}
+    where user_name = #{userName,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,13 @@
+.page-enter-active, .page-leave-active {
+  transition: opacity .3s;
+}
+.page-enter, .page-leave-active {
+  opacity: 0;
+}
+
+a {
+  color: rgb(68, 63, 63);
+}
+a:hover{color:rgb(100, 151, 218)}
+
+i{ font-style:normal}

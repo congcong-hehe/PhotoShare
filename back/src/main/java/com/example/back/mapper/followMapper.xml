@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.back.dao.followMapper" >
+  <resultMap id="BaseResultMap" type="com.example.back.pojo.followKey" >
+    <id column="user_name" property="userName" jdbcType="VARCHAR" />
+    <id column="follow_name" property="followName" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    user_name,follow_name
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.example.back.pojo.followKey">
+    select
+    <include refid="Base_Column_List" />
+    from follow
+    where user_name = #{userName,jdbcType=VARCHAR}
+    and follow_name = #{followName,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="com.example.back.pojo.followKey" >
+    delete from follow
+    where user_name = #{userName,jdbcType=VARCHAR}
+      and follow_name = #{followName,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByName" parameterType="java.lang.String" >
+    delete from follow
+    where user_name = #{name,jdbcType=VARCHAR}
+      or follow_name = #{name,jdbcType=VARCHAR}
+  </delete>
+
+  <select id="selectByUserName" resultType="java.lang.String" parameterType="java.lang.String">
+    select follow_name
+    from follow
+    where user_name = #{userName,jdbcType=VARCHAR}
+  </select>
+
+  <insert id="insert" parameterType="com.example.back.pojo.followKey" >
+    insert into follow (user_name, follow_name)
+    values (#{userName,jdbcType=VARCHAR}, #{followName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.back.pojo.followKey" >
+    insert into follow
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="followName != null" >
+        follow_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="followName != null" >
+        #{followName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

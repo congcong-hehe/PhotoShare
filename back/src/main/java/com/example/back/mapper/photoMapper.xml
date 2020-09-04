@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.back.dao.photoMapper" >
+  <resultMap id="BaseResultMap" type="com.example.back.pojo.photo" >
+    <id column="location" property="location" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="photo_tag" property="photoTag" jdbcType="VARCHAR" />
+    <result column="store_time" property="storeTime" jdbcType="TIMESTAMP" />
+    <result column="photo_likes" property="photoLikes" jdbcType="INTEGER" />
+    <result column="photo_collects" property="photoCollects" jdbcType="INTEGER" />
+    <result column="photo_des" property="photoDes" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    location, user_name, photo_tag, store_time, photo_likes, photo_collects, photo_des
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from photo
+    where location like "%"#{location,jdbcType=VARCHAR}"%"
+  </select>
+
+  <select id="selectTop12ByLike" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from photo
+    order by photo_likes desc limit 12;
+  </select>
+
+  <select id="selectNewPhoto" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from photo
+    order by store_time desc;
+  </select>
+
+  <select id="selectPhotoByName" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from photo
+    where user_name = #{name,jdbcType=VARCHAR}
+    order by store_time asc;
+  </select>
+
+  <update id="updatePhotoLikesPos" parameterType="java.lang.String" >
+    update photo
+    set photo_likes = photo_likes + 1
+    where location = #{location,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updatePhotoLikesNeg" parameterType="java.lang.String" >
+    update photo
+    set photo_likes = photo_likes - 1
+    where location = #{location,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updatePhotoCollectsPos" parameterType="java.lang.String" >
+    update photo
+    set photo_collects = photo_collects + 1
+    where location = #{location,jdbcType=VARCHAR}
+  </update>
+
+  <update id="updatePhotoCollectsNeg" parameterType="java.lang.String" >
+    update photo
+    set photo_collects = photo_collects - 1
+    where location = #{location,jdbcType=VARCHAR}
+  </update>
+
+  <select id="selectCollectPhotoList" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    photo.location, photo.user_name, photo.photo_tag, photo.store_time, photo.photo_likes, photo.photo_collects, photo.photo_des
+    from photo,photocollect
+    where photocollect.user_name = #{name,jdbcType=VARCHAR} and photo.location = photocollect.location
+    order by photo.store_time desc;
+  </select>
+
+  <select id="selectPhotoByTag" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from photo
+    where photo_tag like "%"#{tag,jdbcType=VARCHAR}"%"
+    order by store_time desc;
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from photo
+    where location = #{location,jdbcType=VARCHAR}
+  </delete>
+
+  <delete id="deleteByName" parameterType="java.lang.String" >
+    delete from photo
+    where user_name = #{name,jdbcType=VARCHAR}
+  </delete>
+
+  <insert id="insert" parameterType="com.example.back.pojo.photo" >
+    insert into photo (location, user_name, photo_tag, 
+      store_time, photo_likes, photo_collects, 
+      photo_des)
+    values (#{location,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, #{photoTag,jdbcType=VARCHAR}, 
+      #{storeTime,jdbcType=TIMESTAMP}, #{photoLikes,jdbcType=INTEGER}, #{photoCollects,jdbcType=INTEGER}, 
+      #{photoDes,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.back.pojo.photo" >
+    insert into photo
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="photoTag != null" >
+        photo_tag,
+      </if>
+      <if test="storeTime != null" >
+        store_time,
+      </if>
+      <if test="photoLikes != null" >
+        photo_likes,
+      </if>
+      <if test="photoCollects != null" >
+        photo_collects,
+      </if>
+      <if test="photoDes != null" >
+        photo_des,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="photoTag != null" >
+        #{photoTag,jdbcType=VARCHAR},
+      </if>
+      <if test="storeTime != null" >
+        #{storeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="photoLikes != null" >
+        #{photoLikes,jdbcType=INTEGER},
+      </if>
+      <if test="photoCollects != null" >
+        #{photoCollects,jdbcType=INTEGER},
+      </if>
+      <if test="photoDes != null" >
+        #{photoDes,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.back.pojo.photo" >
+    update photo
+    <set >
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="photoTag != null" >
+        photo_tag = #{photoTag,jdbcType=VARCHAR},
+      </if>
+      <if test="storeTime != null" >
+        store_time = #{storeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="photoLikes != null" >
+        photo_likes = #{photoLikes,jdbcType=INTEGER},
+      </if>
+      <if test="photoCollects != null" >
+        photo_collects = #{photoCollects,jdbcType=INTEGER},
+      </if>
+      <if test="photoDes != null" >
+        photo_des = #{photoDes,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where location = #{location,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.back.pojo.photo" >
+    update photo
+    set user_name = #{userName,jdbcType=VARCHAR},
+      photo_tag = #{photoTag,jdbcType=VARCHAR},
+      store_time = #{storeTime,jdbcType=TIMESTAMP},
+      photo_likes = #{photoLikes,jdbcType=INTEGER},
+      photo_collects = #{photoCollects,jdbcType=INTEGER},
+      photo_des = #{photoDes,jdbcType=VARCHAR}
+    where location = #{location,jdbcType=VARCHAR}
+  </update>
+</mapper>
