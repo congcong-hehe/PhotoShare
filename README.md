@@ -53,4 +53,4 @@
 ![img](image/上传改.png)
 
 ## 协议
-[MIT](https://opensource.org/licenses/MIT)
+MIT
